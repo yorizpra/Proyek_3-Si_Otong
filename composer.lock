@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8f763231e4e62f2926c044f8b225742a",
+    "content-hash": "dafd65059e741fa37104e6ac41e13b16",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1368,6 +1368,13 @@
             ],
             "description": "PHP Wrapper for Midtrans Payment API.",
             "homepage": "https://midtrans.com",
+<<<<<<< HEAD
+=======
+            "support": {
+                "issues": "https://github.com/Midtrans/midtrans-php/issues",
+                "source": "https://github.com/Midtrans/midtrans-php/tree/v2.3.2"
+            },
+>>>>>>> a5666419079e8ed4a7925e4719cc2c5d1e2d5a2e
             "time": "2020-07-21T06:42:34+00:00"
         },
         {
