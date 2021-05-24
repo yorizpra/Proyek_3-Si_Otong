@@ -19,7 +19,7 @@
                 <div class="p-3 p-lg-5 border">
                   <form action="{{ route('user.order.simpan') }}" method="POST">
                     @csrf
-                  <table class="table site-block-order-table mb-5">
+                  <table class="table site-block-order-table mb-5" id="table-checkout" data-alamat="{{json_encode($alamat)}}" data-keranjangs="{{json_encode($keranjangs)}}">
                     <thead>
                       <th>Product</th>
                       <th>Total</th>
@@ -41,7 +41,7 @@
                           Ongkir
                         </td>
                         <td>
-                          Rp .{{ number_format($ongkir,2,',','.') }}
+                          Rp <span id="text-ongkir">0</span>
                         </td>
                       </tr>
                       <tr>
@@ -64,16 +64,34 @@
                     <label for="">No telepon yang bisa dihubungi</label>
                     <input type="text" name="no_hp" id="" class="form-control">
                   </div>
+                  <div class="form-group d-none" id="kurir">
+                    <label>Kurir</label>
+                    <select class="form-control kurir" name="courier">
+                        <option value="0">-- pilih kurir --</option>
+                        <option value="jne">JNE</option>
+                        <option value="pos">POS</option>
+                        <option value="tiki">TIKI</option>
+                    </select>
+                </div>
                   <input type="hidden" name="invoice" value="{{ $invoice }}">
                   <input type="hidden" name="subtotal" value="{{ $alltotal }}">
-                  <input type="hidden" name="ongkir" value="{{ $ongkir }}">
+                  <input type="hidden" name="ongkir" id="inp-ongkir">
                   <div class="form-group">
+                    @php
+                        $alamat_second = $alamat;
+                        $keranjangs_second = $keranjangs;
+                    @endphp
                   <label for="">Pilih Metode Pembayaran</label>
-                    <select name="metode_pembayaran" id="" class="form-control">
+                    <select name="metode_pembayaran" id="pay-method"  data-keranjangs="@php $keranjangs_second @endphp" class="form-control">
+                      <option value="0">-- pilih metode --</option>
                       <option value="trf">Transfer</option>
                       <option value="cod">Cod</option>
                     </select>
                     <small>Jika memilih cod maka akan dikenakan biaya tambahan sebesar Rp. 10.000,00</small>
+                  </div>
+                  <div class="form-group d-none" id="pilih-ongkir">
+                    <ul class="list-group" id="ongkir2"></ul>
+                    
                   </div>
                  
 
@@ -92,3 +110,75 @@
       </div>
     </div>
 @endsection
+
+@push('cs-script')
+
+<script>
+
+
+  $('#pay-method').on('change', function () {
+      if($(this).val() === "trf"){
+        $('#kurir').removeClass('d-none');
+        $('#kurir').addClass('d-block');
+      }else{
+        $('#kurir').removeClass('d-block');
+        $('#kurir').addClass('d-none');
+      }
+  });
+
+  let isProcessing = false;
+        $('#kurir').on('change', function (e) {
+            e.preventDefault();
+
+            let token            = $("meta[name='csrf-token']").attr("content");
+            let keranjangs  =  $('#table-checkout').data('keranjangs');
+            let alamat  =  $('#table-checkout').data('alamat');
+            let courier          = $('select[name=courier]').val();
+            console.log(courier);
+
+            if(isProcessing){
+                return;
+            }
+
+            isProcessing = true;
+            jQuery.ajax({
+                url: "/ongkir",
+                data: {
+                    _token:              token,
+                    keranjangs: keranjangs,
+                    alamat: alamat,
+                    courier: courier,
+                },
+                dataType: "JSON",
+                type: "POST",
+                success: function (response) {
+                    isProcessing = false;
+                    console.log(response);
+                    if (response) {
+                        $('#ongkir2').empty();
+                        $('#pilih-ongkir').addClass('d-block');
+                        $.each(response[0]['costs'], function (key, value) {
+                            console.log(value.service);
+                            $('#ongkir2').append(`<li class="list-group-item">${response[0].code.toUpperCase()} : <strong>${value.service}</strong> - Rp. ${value.cost[0].value} (${value.cost[0].etd} hari) <a href="#" class="btn btn-primary float-right" onclick="chooseOngkir(`+ value.cost[0].value +`)">Pilih</a>  </li>`)
+                        });
+
+                    }
+                },
+                error:function(err){
+                  console.log(err);
+                }
+
+            });
+
+        });
+
+
+        function chooseOngkir(price){
+          event.preventDefault();
+          $('#text-ongkir').text(price);
+          $('#inp-ongkir').val(price);
+        }
+
+</script>
+  
+@endpush

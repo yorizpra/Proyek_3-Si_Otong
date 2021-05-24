@@ -19,6 +19,7 @@
 
     <link rel="stylesheet" href="{{ asset('shopper') }}/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
   </head>
   <body>
   
@@ -211,5 +212,6 @@
 
   <script src="{{ asset('shopper') }}/js/main.js"></script>
     @yield('js')
+    @stack('cs-script')
   </body>
 </html>
