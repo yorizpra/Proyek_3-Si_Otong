@@ -41,7 +41,7 @@
                           Ongkir
                         </td>
                         <td>
-                          Rp <span id="text-ongkir">0</span>
+                          Rp. <span id="text-ongkir">0</span>
                         </td>
                       </tr>
                       <tr>
