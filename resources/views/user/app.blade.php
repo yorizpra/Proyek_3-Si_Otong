@@ -121,7 +121,7 @@
           </div>
         </div>
       </div> 
-      <nav class="site-navigation text-right text-md-center" role="navigation">
+      {{-- <nav class="site-navigation text-right text-md-center" role="navigation">
         <div class="container">
           <ul class="site-menu js-clone-nav d-none d-md-block">
             <li class="{{ Request::path() === '/' ? '' : '' }}"><a href="{{ route('home') }}">Beranda</a></li>
@@ -129,12 +129,12 @@
             <li class="{{ Request::path() === 'kontak' ? '' : '' }}"><a href="{{ route('kontak') }}">Kontak</a></li>
           </ul>
         </div>
-      </nav>
+      </nav> --}}
     </header>
 
     @yield('content')
     
-    <footer class="site-footer border-top">
+    {{-- <footer class="site-footer border-top">
       <div class="container">
         <div class="row">
           <div class="col-lg-6 mb-5 mb-lg-0">
@@ -198,7 +198,7 @@
           
         </div>
       </div>
-    </footer>
+    </footer> --}}
   </div>
 
   <script src="{{ asset('shopper') }}/js/jquery-3.3.1.min.js"></script>
