@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\user;
 
+use App\Alamat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +72,7 @@ class CheckoutController extends Controller
             $berattotal = $berattotal + $berat;
         }
 
-        $city = DB::table('alamat')->where('user_id', $id_user)->get();
+        $city = Alamat::where('user_id', $id_user)->get();
         $city_destination =  $city[0]->cities_id;
 
         $cost = RajaOngkir::ongkosKirim([
