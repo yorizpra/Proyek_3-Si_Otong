@@ -45,10 +45,18 @@
                         </td>
                       </tr>
                       <tr>
+                        <td>
+                          Kurir
+                        </td>
+                        <td>
+                          <span id="text-courier"></span>
+                        </td>
+                      </tr>
+                      <tr>
                         <td class="text-black font-weight-bold"><strong>Jumlah Pembayaran</strong></td>
                         <td class="text-black font-weight-bold">
-                        <?php $alltotal = $subtotal + $ongkir; ?>  
-                        <strong>Rp. {{ number_format($alltotal,2,',','.') }}</strong></td>
+                        <?php $alltotal = $subtotal; ?>  Rp. 
+                        <strong id="total-text">{{ number_format($subtotal,2,',','.') }}</strong></td>
                       </tr>
                       <tr>
                       <td>Alamat Penerima</td>
@@ -74,8 +82,10 @@
                     </select>
                 </div>
                   <input type="hidden" name="invoice" value="{{ $invoice }}">
-                  <input type="hidden" name="subtotal" value="{{ $alltotal }}">
+                  <input type="hidden" name="barang" id="barang" value="{{ $subtotal }}">
+                  <input type="hidden" name="subtotal" id="total-inp" value="{{ $subtotal }}">
                   <input type="hidden" name="ongkir" id="inp-ongkir">
+                  <input type="text" name="courier" id="courier-inp" >
                   <div class="form-group">
                     @php
                         $alamat_second = $alamat;
@@ -159,7 +169,7 @@
                         $('#pilih-ongkir').addClass('d-block');
                         $.each(response[0]['costs'], function (key, value) {
                             console.log(value.service);
-                            $('#ongkir2').append(`<li class="list-group-item">${response[0].code.toUpperCase()} : <strong>${value.service}</strong> - Rp. ${value.cost[0].value} (${value.cost[0].etd} hari) <a href="#" class="btn btn-primary float-right" onclick="chooseOngkir(`+ value.cost[0].value +`)">Pilih</a>  </li>`)
+                            $('#ongkir2').append(`<li class="list-group-item">${response[0].code.toUpperCase()} : <strong>${value.service}</strong> - Rp. ${value.cost[0].value} (${value.cost[0].etd} hari) <a href="#" class="btn btn-primary float-right" onclick="chooseOngkir(`+ value.cost[0].value +`,'`+ response[0].code.toUpperCase() +`','`+ value.service +`')">Pilih</a>  </li>`)
                         });
 
                     }
@@ -173,10 +183,34 @@
         });
 
 
-        function chooseOngkir(price){
+        let total = 0;
+        function chooseOngkir(price, courier, service){
           event.preventDefault();
-          $('#text-ongkir').text(price);
+
+          var	reverse = price.toString().split('').reverse().join(''),
+          ribuan 	= reverse.match(/\d{1,3}/g);
+          ribuan	= ribuan.join('.').split('').reverse().join('');
+
+          let courierService = courier +' : '+ service;
+          $('#text-ongkir').text(ribuan + ',00');
+          $('#text-courier').text(courierService);
           $('#inp-ongkir').val(price);
+          $('#courier-inp').val(courierService);
+
+          let harga_barang = $('#barang').val();
+          totalHarga(harga_barang, price);
+
+        }
+
+        function totalHarga(harga_barang, price){
+          total = parseFloat(harga_barang) + parseFloat(price);
+
+          var	reverse = total.toString().split('').reverse().join(''),
+          ribuan 	= reverse.match(/\d{1,3}/g);
+          ribuan	= ribuan.join('.').split('').reverse().join('');
+
+          $('#total-text').text(ribuan + ',00');
+          $('#total-inp').val(total);
         }
 
 </script>

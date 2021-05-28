@@ -220,6 +220,7 @@ class OrderController extends Controller
                 'status_order_id' => 1,
                 'metode_pembayaran' => 'transfer',
                 'ongkir' => $request->ongkir,
+                'courier' => $request->courier,
                 'no_hp' => $request->no_hp,
                 'pesan' => $request->pesan
             ]);

@@ -65,7 +65,7 @@
                         <tr>
                             <td>Kurir</td>
                             <td>:</td>
-                            <td  class="p-2">JNE Service OKE</td>
+                            <td  class="p-2">{{$order->courier}}</td>
                         </tr>
                         @if($order->no_resi != null)
                         <tr>

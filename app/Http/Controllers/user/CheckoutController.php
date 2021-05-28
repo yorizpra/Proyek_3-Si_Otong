@@ -34,16 +34,6 @@ class CheckoutController extends Controller
         //ambil id kota toko
         $alamat_toko = DB::table('alamat_toko')->first();
 
-        //lalu hitung ongkirnya
-        $cost = RajaOngkir::ongkosKirim([
-            'origin'  => $alamat_toko->id,
-            'destination' => $city_destination,
-            'weight' => $berattotal,
-            'courier' => 'jne'
-        ])->get();
-        // dd($cost);
-        //ambil hasil nya
-        $ongkir =  $cost[0]['costs'][0]['cost'][0]['value'];
 
         //lalu ambil alamat user untuk ditampilkan di view
         $alamat_user = DB::table('alamat')
@@ -57,7 +47,7 @@ class CheckoutController extends Controller
         $invoice = 'ALV' . Date('Ymdhi');
         $alamat = $alamat_user;
 
-        return view('user.checkout', compact('invoice', 'keranjangs', 'ongkir', 'alamat'));
+        return view('user.checkout', compact('invoice', 'keranjangs', 'alamat'));
     }
 
     public function check_ongkir(Request $request)
